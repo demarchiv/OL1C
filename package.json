@@ -31,7 +31,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://saradinismarques.github.io/ol-compass",
+  "homepage": "https://demarchiv.github.io/OL1C",
   "eslintConfig": {
     "extends": [
       "react-app",
