@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/OL1C/static/css/main.91e32c88.css",
+    "main.js": "/OL1C/static/js/main.4804b901.js",
+    "static/js/213.8f03509e.chunk.js": "/OL1C/static/js/213.8f03509e.chunk.js",
+    "static/js/732.beb7b8aa.chunk.js": "/OL1C/static/js/732.beb7b8aa.chunk.js",
+    "static/media/P4.png": "/OL1C/static/media/P4.29b5c53953227f7f21e1.png",
+    "static/media/P6.png": "/OL1C/static/media/P6.ffcfd02e8d2b861d26b9.png",
+    "static/media/P2.png": "/OL1C/static/media/P2.2ebf57c2c35e6e079321.png",
+    "static/media/pdf-page-2.png": "/OL1C/static/media/pdf-page-2.b0b9c453a0d84d55359e.png",
+    "static/media/P7.png": "/OL1C/static/media/P7.1e6d2ebc7d325e51f459.png",
+    "static/media/P1.png": "/OL1C/static/media/P1.fd213acc4a1dfb7b1916.png",
+    "static/media/P5.png": "/OL1C/static/media/P5.a5d22ee9bfdb424697bb.png",
+    "static/media/P3.png": "/OL1C/static/media/P3.29b5e6bcc0899548b2ad.png",
+    "static/media/pdf-page-1.png": "/OL1C/static/media/pdf-page-1.a6e50079cd6636dbe30b.png",
+    "static/media/pdf-page-9.png": "/OL1C/static/media/pdf-page-9.31934908c65a497e08b2.png",
+    "static/media/pdf-watermark-pagesize.png": "/OL1C/static/media/pdf-watermark-pagesize.f2ca98e9da0baa62d803.png",
+    "static/media/pdf-page-8.png": "/OL1C/static/media/pdf-page-8.133c636e04a7c4a63128.png",
+    "static/media/wave-icon.svg": "/OL1C/static/media/wave-icon.8802d95dbef46f8fc99af530f4700f0c.svg",
+    "static/media/question-icon.svg": "/OL1C/static/media/question-icon.975f233fd21e0830e30a3fa74936ae8b.svg",
+    "index.html": "/OL1C/index.html",
+    "static/media/go-back-icon.svg": "/OL1C/static/media/go-back-icon.0477c5c96d5914a6c72f5fbc6fa637c6.svg",
+    "static/media/arrow2-icon.svg": "/OL1C/static/media/arrow2-icon.cd85148e92f186d4a5e19b98ce505866.svg",
+    "static/media/bookmark-icon.svg": "/OL1C/static/media/bookmark-icon.eb5ce946e5215083a45aab59979a721c.svg",
+    "static/media/lock-icon.svg": "/OL1C/static/media/lock-icon.b5a2e0fee8499941ec93fcf0f397bfe6.svg",
+    "static/media/home-icon.svg": "/OL1C/static/media/home-icon.0c3c9da5d9700a80861f9556e824e7d7.svg",
+    "static/media/cta-arrow-icon.svg": "/OL1C/static/media/cta-arrow-icon.433bc48be0a8eda660440669896a06cb.svg",
+    "static/media/arrow-icon.svg": "/OL1C/static/media/arrow-icon.1f5acd6d92eb94971900eff54a74df42.svg",
+    "main.91e32c88.css.map": "/OL1C/static/css/main.91e32c88.css.map",
+    "main.4804b901.js.map": "/OL1C/static/js/main.4804b901.js.map",
+    "213.8f03509e.chunk.js.map": "/OL1C/static/js/213.8f03509e.chunk.js.map",
+    "732.beb7b8aa.chunk.js.map": "/OL1C/static/js/732.beb7b8aa.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.91e32c88.css",
+    "static/js/main.4804b901.js"
+  ]
+}
