@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { HashRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-//import { useNavigate } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
+//import { useNavigate, useLocation } from 'react-router-dom';
 import IntroPage from './pages/IntroPage';
 import HomePage from './pages/HomePage';
 import LearnPage from './pages/LearnPage';
