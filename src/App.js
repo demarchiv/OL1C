@@ -12,6 +12,7 @@ import Map2Page from './pages/Map2Page';
 import ContributePage from './pages/ContributePage';
 import ContextualizePage from './pages/ContextualizePage';
 import ComparePage from './pages/ComparePage';
+import EditorPage from './pages/EditorPage';
 import './styles/App.css';
 import { State, StateContext } from "./State";
 
@@ -121,6 +122,10 @@ function App() {
             path="/compare"
             element={<ComparePage />}
           /> 
+          <Route
+            path="/editor"
+            element={<EditorPage />}
+          />
           {/* Catch-all route */}
           <Route path="*" element={<IntroPage />} />
         </Routes>

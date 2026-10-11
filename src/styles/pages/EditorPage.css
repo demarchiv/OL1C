@@ -1,0 +1,197 @@
+/* Ocean Literacy Dimensions Editor */
+.ed-page {
+    position: fixed;
+    inset: 0;
+    background: #ffffff;
+    font-family: 'Manrope', sans-serif;
+    color: #000;
+    overflow: hidden;
+}
+
+.ed-home {
+    position: absolute;
+    top: 3vh;
+    left: 2.5vw;
+    font-size: clamp(12px, 2vh, 20px);
+    font-weight: 600;
+    color: #5d5d5d;
+    text-decoration: none;
+    border: 2px solid #000;
+    border-radius: 100px;
+    padding: 0.6vh 1.6vh;
+    z-index: 5;
+}
+.ed-home:hover { background: rgba(0, 0, 0, 0.1); }
+
+/* Ring */
+.ed-ring {
+    position: absolute;
+    left: 7vw;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(94vh, 58vw);
+    height: min(94vh, 58vw);
+}
+.ed-ring svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+.ed-center-title {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 600;
+    font-size: 54px;
+    fill: var(--highlightD-color, #85c1e5);
+    user-select: none;
+}
+.ed-center-title.strong { font-size: 62px; }
+
+.ed-wave { cursor: pointer; }
+.ed-wave:hover path:first-child { opacity: 0.85; }
+
+.ed-icon-button { cursor: pointer; outline: none; }
+.ed-icon-circle { fill: #d9d9d9; stroke: none; transition: fill 0.15s; }
+.ed-icon-glyph { fill: #5a5a5a; }
+.ed-icon-circle.plus { fill: #ececec; }
+.ed-icon-button.plus .ed-icon-glyph { fill: #ffffff; }
+.ed-icon-button:hover .ed-icon-circle { fill: #bdbdbd; }
+.ed-icon-button.plus:hover .ed-icon-circle { fill: #cfcfcf; }
+.ed-icon-button:focus-visible .ed-icon-circle { stroke: #000; stroke-width: 3; }
+.ed-icon-button.selected .ed-icon-circle { fill: #d9d9d9; stroke: #1d1d1d; stroke-width: 7; }
+
+/* Panel */
+.ed-panel {
+    position: absolute;
+    left: 69vw;
+    right: 3vw;
+    top: 3vh;
+    bottom: 3vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    min-width: 0;
+}
+
+.ed-card {
+    background: #f4f4f4;
+    border-radius: 2.4vh;
+    padding: 2vh 2vh 2.2vh;
+    text-align: center;
+    flex: 0 1 auto;
+    overflow-y: auto;
+    max-height: 62vh;
+}
+
+.ed-hint { color: #5d5d5d; font-size: clamp(12px, 2vh, 20px); line-height: 1.45; }
+.ed-hint-title { font-weight: 800; font-size: clamp(15px, 2.8vh, 28px); color: #000; margin: 0.4vh 0 1vh; }
+.ed-hint p { margin: 0 0 1vh; }
+.ed-hint-small { font-size: 0.85em; opacity: 0.75; }
+
+.ed-preview { width: 70%; height: auto; display: block; margin: 0 auto 0.6vh; }
+
+.ed-actions { list-style: none; margin: 0; padding: 0; }
+.ed-actions li { margin: 0.2vh 0; }
+.ed-actions button {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: clamp(14px, 2.5vh, 26px);
+    background: none;
+    border: none;
+    padding: 0.5vh 1vh;
+    cursor: pointer;
+    color: #000;
+    border-radius: 1vh;
+}
+.ed-actions button:hover:not(:disabled) { background: rgba(0, 0, 0, 0.07); }
+.ed-actions button:disabled { cursor: default; }
+.ed-soon {
+    color: #a8a8a8;
+    font-weight: 700;
+    font-size: clamp(11px, 1.9vh, 19px);
+    margin-top: 0.8vh !important;
+}
+.ed-soon span {
+    display: block;
+    font-size: 0.7em;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.ed-row { display: flex; gap: 1vh; justify-content: center; flex-wrap: wrap; margin-top: 1vh; }
+.ed-move { margin-bottom: 0.6vh; }
+
+.ed-pill {
+    font-family: inherit;
+    font-weight: 600;
+    font-size: clamp(11px, 1.8vh, 18px);
+    border: 2px solid #000;
+    background: #fff;
+    border-radius: 100px;
+    padding: 0.6vh 1.6vh;
+    cursor: pointer;
+    color: #000;
+}
+.ed-pill:hover:not(:disabled) { background: rgba(0, 0, 0, 0.1); }
+.ed-pill.dark { background: #000; color: #fff; }
+.ed-pill.dark:hover:not(:disabled) { background: #333; }
+.ed-pill:disabled { opacity: 0.35; cursor: default; }
+
+.ed-rename { text-align: left; }
+.ed-rename label { display: block; font-weight: 600; font-size: clamp(11px, 1.8vh, 18px); color: #5d5d5d; margin-bottom: 0.6vh; }
+.ed-rename input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: clamp(14px, 2.4vh, 24px);
+    padding: 1.2vh 1.4vh;
+    border: 2px solid #ceceda;
+    border-radius: 1vh;
+    background: #fff;
+    color: #454574;
+    text-transform: uppercase;
+}
+.ed-rename input:focus { outline: none; border-color: #000; }
+
+.ed-confirm { font-size: clamp(11px, 1.8vh, 18px); font-weight: 600; color: #5d5d5d; padding: 0.6vh 0; }
+.ed-confirm.box { background: #f4f4f4; border-radius: 1.6vh; padding: 1.4vh; text-align: center; margin-bottom: 1.2vh; }
+
+.ed-source { margin-top: 1.2vh; text-align: left; border-top: 1px solid #dcdcdc; padding-top: 1vh; }
+.ed-source-note { font-size: clamp(10px, 1.55vh, 16px); line-height: 1.4; color: #5d5d5d; margin: 0 0 0.8vh; }
+
+.ed-section-title { font-weight: 800; font-size: clamp(12px, 2.2vh, 22px); letter-spacing: 0.02em; margin: 0 0 1vh; }
+.ed-aside { flex: 0 0 auto; }
+.ed-chips { display: flex; flex-wrap: wrap; gap: 0.8vh; }
+.ed-chip {
+    font-family: inherit; font-weight: 600; font-size: clamp(10px, 1.6vh, 16px);
+    border: 2px dashed #8a8a8a; background: #fff; color: #5d5d5d;
+    border-radius: 100px; padding: 0.5vh 1.4vh; cursor: pointer;
+}
+.ed-chip:hover { background: rgba(0, 0, 0, 0.07); }
+
+.ed-bottom { margin-top: auto; text-align: center; }
+.ed-bottom .ed-section-title { font-size: clamp(14px, 3vh, 30px); margin: 1.6vh 0 1.2vh; }
+
+.ed-download {
+    font-family: inherit; font-weight: 600; font-size: clamp(10px, 1.6vh, 16px);
+    border: none; background: none; color: #5d5d5d; text-decoration: underline;
+    cursor: pointer; padding: 0.4vh;
+}
+.ed-download:hover { color: #000; }
+
+.ed-model {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: clamp(11px, 2vh, 20px);
+    line-height: 1.25;
+    border: 2px solid #000;
+    background: #fff;
+    border-radius: 100px;
+    padding: 1.1vh 1vh;
+    margin-bottom: 1.2vh;
+    cursor: pointer;
+    color: #000;
+}
+.ed-model small { display: block; font-size: 0.78em; font-weight: 500; opacity: 0.85; }
+.ed-model:hover { background: rgba(0, 0, 0, 0.08); }
+.ed-model.current { background: #aaaaaa; color: #fff; }
