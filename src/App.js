@@ -13,6 +13,7 @@ import ContributePage from './pages/ContributePage';
 import ContextualizePage from './pages/ContextualizePage';
 import ComparePage from './pages/ComparePage';
 import EditorPage from './pages/EditorPage';
+import DetectTestPage from './pages/DetectTestPage';
 import './styles/App.css';
 import { State, StateContext } from "./State";
 
@@ -125,6 +126,10 @@ function App() {
           <Route
             path="/editor"
             element={<EditorPage />}
+          />
+          <Route
+            path="/detect-test"
+            element={<DetectTestPage />}
           />
           {/* Catch-all route */}
           <Route path="*" element={<IntroPage />} />
