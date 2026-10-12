@@ -178,10 +178,13 @@ const fail = (message, fatal) => {
   return error;
 };
 
-export const detectWaves = async ({ apiKey, model, image, signal, onWait }) => {
+export const detectWaves = async ({ apiKey, model, image, signal, onWait, fast }) => {
   const url = `${API_ROOT}/${encodeURIComponent(model)}:generateContent`;
   // Note: no "temperature" here. Google's newest Flash models reject it.
-  const body = JSON.stringify({
+  // "fast" asks the model to think less before answering (much quicker). If the
+  // chosen model does not understand that setting, we retry without it.
+  let askFast = !!fast;
+  const makeBody = () => JSON.stringify({
     contents: [{
       role: 'user',
       parts: [
@@ -189,10 +192,14 @@ export const detectWaves = async ({ apiKey, model, image, signal, onWait }) => {
         { inline_data: { mime_type: image.mime, data: image.base64 } },
       ],
     }],
-    generationConfig: { responseMimeType: 'application/json' },
+    generationConfig: {
+      responseMimeType: 'application/json',
+      ...(askFast ? { thinkingConfig: { thinkingLevel: 'low' } } : {}),
+    },
   });
+  let body = makeBody();
 
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+  for (let attempt = 0; attempt <= MAX_RETRIES + 1; attempt++) {
     const timeout = new AbortController();
     const timer = setTimeout(() => timeout.abort(), REQUEST_TIMEOUT_MS);
     const onUserAbort = () => timeout.abort();
@@ -237,6 +244,11 @@ export const detectWaves = async ({ apiKey, model, image, signal, onWait }) => {
     }
     if (response.status === 404) {
       throw fail(`Model "${model}" was not found. Change the model name (see the suggestions) and try again.`, true);
+    }
+    if (response.status === 400 && askFast && /thinking/i.test(apiMessage)) {
+      askFast = false;          // this model does not accept the setting: try again without it
+      body = makeBody();
+      continue;
     }
     if (response.status === 400) {
       const keyProblem = /api key/i.test(apiMessage);

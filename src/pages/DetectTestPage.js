@@ -1,12 +1,12 @@
-import React, { useContext, useState, useRef, useMemo } from 'react';
+import React, { useContext, useState, useRef, useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { StateContext } from '../State';
 import { encodedFonts } from '../assets/fonts/Fonts.js';
 import { WAVES, REFERENCE_MAPS, referenceKey } from '../data/waveList';
-import { DEFAULT_MODEL, MODEL_SUGGESTIONS, makeThumb, prepareImage, detectWaves, sleep } from '../utils/geminiDetect';
+import { DEFAULT_MODEL, MODEL_SUGGESTIONS, makeThumb, prepareImage, detectWaves } from '../utils/geminiDetect';
 import '../styles/pages/DetectTestPage.css';
 
-const PAUSE_BETWEEN_PHOTOS_MS = 5000;   // keeps us under the free tier's per-minute limit
+const PARALLEL = 3;   // photos analysed at the same time (the free tier allows roughly 10 per minute)
 const IMAGE_FILE = /\.(jpe?g|png|webp|heic|heif)$/i;
 
 const stripExtension = (name) => name.replace(/\.[^.]+$/, '');
@@ -35,6 +35,15 @@ const DetectTestPage = () => {
   const [running, setRunning] = useState(false);
   const [useReference, setUseReference] = useState(true);
   const [notice, setNotice] = useState('');
+  const [fast, setFast] = useState(true);
+  const [now, setNow] = useState(Date.now());
+  const [runTime, setRunTime] = useState(null);
+
+  useEffect(() => {
+    if (!running) return undefined;
+    const timer = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [running]);
 
   const cancelRef = useRef(false);
   const abortRef = useRef(null);
@@ -90,38 +99,48 @@ const DetectTestPage = () => {
     if (!todo.length) { setNotice(files.length ? 'All photos are already done.' : 'Add some photos first (step 3).'); return; }
 
     setNotice('');
+    setRunTime(null);
     cancelRef.current = false;
     const controller = new AbortController();
     abortRef.current = controller;
     setRunning(true);
+    const began = Date.now();
 
-    for (let i = 0; i < todo.length; i++) {
-      if (cancelRef.current) break;
-      const f = todo[i];
-      updateFile(f.name, { status: 'working', message: 'preparing photo…' });
-      try {
-        const image = await prepareImage(f.file);
-        updateFile(f.name, { message: 'asking Gemini…' });
-        const out = await detectWaves({
-          apiKey: apiKey.trim(),
-          model: model.trim(),
-          image,
-          signal: controller.signal,
-          onWait: (s) => updateFile(f.name, { message: `limit hit, retry in ${s}s` }),
-        });
-        updateFile(f.name, { status: 'done', message: '', present: out.present, uncertain: out.uncertain });
-      } catch (e) {
-        if (e && e.name === 'AbortError') {
-          updateFile(f.name, { status: 'queued', message: '' });
-          break;
+    let next = 0;
+    const worker = async () => {
+      while (!cancelRef.current && next < todo.length) {
+        const f = todo[next++];
+        const started = Date.now();
+        updateFile(f.name, { status: 'working', message: 'preparing photo…', startedAt: started });
+        try {
+          const image = await prepareImage(f.file);
+          updateFile(f.name, { message: 'asking Gemini…' });
+          const out = await detectWaves({
+            apiKey: apiKey.trim(),
+            model: model.trim(),
+            image,
+            fast,
+            signal: controller.signal,
+            onWait: (s) => updateFile(f.name, { message: `limit hit, retry in ${s}s` }),
+          });
+          updateFile(f.name, { status: 'done', message: '', present: out.present, uncertain: out.uncertain, seconds: Math.round((Date.now() - started) / 1000) });
+        } catch (e) {
+          if (e && e.name === 'AbortError') {
+            updateFile(f.name, { status: 'queued', message: '' });
+            return;
+          }
+          updateFile(f.name, { status: 'error', message: e.message || 'Something went wrong.' });
+          if (e && e.fatal) {
+            setNotice(e.message);
+            cancelRef.current = true;
+            controller.abort();
+            return;
+          }
         }
-        updateFile(f.name, { status: 'error', message: e.message || 'Something went wrong.' });
-        if (e && e.fatal) { setNotice(e.message); break; }
       }
-      if (i < todo.length - 1 && !cancelRef.current) {
-        try { await sleep(PAUSE_BETWEEN_PHOTOS_MS, controller.signal); } catch (e) { break; }
-      }
-    }
+    };
+    await Promise.all(Array.from({ length: Math.min(PARALLEL, todo.length) }, worker));
+    setRunTime(Math.round((Date.now() - began) / 1000));
     setRunning(false);
   };
 
@@ -208,7 +227,10 @@ const DetectTestPage = () => {
 
   const columnScore = (f) => {
     if (f.status === 'queued') return <span className="dt-score muted">waiting</span>;
-    if (f.status === 'working') return <span className="dt-score working">{f.message || 'reading…'}</span>;
+    if (f.status === 'working') {
+      const secs = f.startedAt ? Math.max(0, Math.round((now - f.startedAt) / 1000)) : 0;
+      return <span className="dt-score working">{f.message || 'reading…'} {f.message && f.message.startsWith('limit') ? '' : `${secs}s`}</span>;
+    }
     if (f.status === 'error') return <span className="dt-score bad" title={f.message}>error</span>;
     const stat = analysis.perFile[f.name];
     if (!stat) return <span className="dt-score">{f.present.length} waves</span>;
@@ -299,6 +321,13 @@ const DetectTestPage = () => {
         </div>
 
         <div className="dt-step">
+          <label className="dt-check first">
+            <input type="checkbox" checked={fast} onChange={(e) => setFast(e.target.checked)} disabled={running} />
+            <span>Fast mode (the model thinks less). Untick to compare accuracy; slower.</span>
+          </label>
+        </div>
+
+        <div className="dt-step">
           <span className="dt-label">3 · Photos</span>
           <div className="dt-row">
             <label className={`dt-pill${running ? ' disabled' : ''}`}>
@@ -331,6 +360,9 @@ const DetectTestPage = () => {
           )}
         </div>
         {notice && <p className="dt-notice" role="alert">{notice}</p>}
+        {runTime !== null && !running && (
+          <p className="dt-note">Finished in {runTime}s ({fast ? 'fast' : 'careful'} mode, {model.trim()}).</p>
+        )}
 
         <div className="dt-step dt-export">
           <span className="dt-label">Download what was detected</span>
