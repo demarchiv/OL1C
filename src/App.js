@@ -14,6 +14,7 @@ import ContextualizePage from './pages/ContextualizePage';
 import ComparePage from './pages/ComparePage';
 import EditorPage from './pages/EditorPage';
 import DetectTestPage from './pages/DetectTestPage';
+import MapsAggregatorPage from './pages/MapsAggregatorPage';
 import './styles/App.css';
 import { State, StateContext } from "./State";
 
@@ -130,6 +131,10 @@ function App() {
           <Route
             path="/detect-test"
             element={<DetectTestPage />}
+          />
+          <Route
+            path="/mapsaggregator"
+            element={<MapsAggregatorPage />}
           />
           {/* Catch-all route */}
           <Route path="*" element={<IntroPage />} />
